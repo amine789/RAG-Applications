@@ -1,0 +1,49 @@
+Neuroscience Corrective/Self-RAG Assistant — Build Plan
+=========================================================
+
+1. Corpus collection
+   Pick a scoped neuroscience source set — e.g. a set of open-access papers
+   (PubMed Central / arXiv q-bio), or a specific subfield (e.g. neuroplasticity,
+   memory, a textbook chapter set) so the eval questions are answerable and
+   scoping stays tight. Store raw files locally.
+
+2. Ingestion & chunking
+   Load with the right loaders (PDF via pypdf, maybe web pages via requests +
+   bs4 if any sources are HTML), chunk with token-aware splitting (like the
+   TokenTextSplitter from the summarization notebook), and attach metadata
+   (source, title, page) for citation later.
+
+3. Indexing (static core)
+   Build a hybrid retriever: a vector store (embeddings) + BM25 keyword index,
+   combined via reciprocal rank fusion or similar. This is the reliable
+   backbone the agent sits on top of.
+
+4. Retrieval grading (the "corrective" step)
+   An LLM-graded relevance check on retrieved chunks per query — binary or
+   scored — to decide if retrieval was actually good enough to answer from.
+
+5. Corrective actions on low-grade retrieval
+   If grading fails: rewrite/expand the query and retry local retrieval,
+   and/or fall back to live web search (duckduckgo-search / ddgs +
+   requests / bs4 — search the web, fetch page content, extract text).
+
+6. Answer generation with citations
+   Generate the final answer from graded chunks (local and/or web), citing
+   sources so answers are checkable — important for a science domain where
+   hallucination is costly.
+
+7. Agent orchestration
+   Wire steps 3-6 into an agent loop (LangGraph is a natural fit) with
+   explicit states: retrieve -> grade -> (rewrite/retry | web fallback) ->
+   generate, so the decision path is inspectable, not just an opaque chain.
+
+8. Evaluation
+   Build a small eval set (10-30 neuroscience Q&A pairs with known answers),
+   measure retrieval precision, answer faithfulness/groundedness (e.g. RAGAS
+   or a custom LLM-judge), and show before/after numbers with vs. without the
+   corrective loop, since that's the proof it's not just decoration.
+
+9. Interface
+   A minimal Streamlit/Gradio app showing the question, the retrieval/
+   grading/correction trail, and the final cited answer — this is what makes
+   it demoable, not just a notebook.
