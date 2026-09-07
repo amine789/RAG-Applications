@@ -13,3 +13,7 @@ bs4
 duckduckgo-search==7.5.0
 ddgs==9.5.5
 chromadb
+langchain-chroma
+langchain-huggingface
+sentence-transformers<5
+numpy<2
