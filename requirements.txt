@@ -17,3 +17,4 @@ langchain-chroma
 langchain-huggingface
 sentence-transformers<5
 numpy<2
+html2text
