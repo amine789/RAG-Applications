@@ -18,3 +18,10 @@ langchain-huggingface
 sentence-transformers<5
 numpy<2
 html2text
+scikit-learn
+rank_bm25
+huggingface
+datasets
+pandas
+torch
+faiss-cpu
