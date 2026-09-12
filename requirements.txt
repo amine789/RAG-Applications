@@ -30,3 +30,4 @@ scipy
 qdrant-client
 kagglehub
 ipywidgets
+matplotlib
