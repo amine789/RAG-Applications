@@ -25,3 +25,8 @@ datasets
 pandas
 torch
 faiss-cpu
+einops
+scipy
+qdrant-client
+kagglehub
+ipywidgets
